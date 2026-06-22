@@ -5,7 +5,7 @@ import { hashPassword } from "@/lib/password";
 import OTP from "@/models/otpModel";
 import User from "@/models/userModel";
 import type { NextRequest } from "next/server";
-import { Schema, Types } from "mongoose";
+import {  Types } from "mongoose";
 import { saveDeviceData } from "@/lib/saveDevicedata";
 
 export async function POST(request: NextRequest) {
@@ -40,11 +40,11 @@ export async function POST(request: NextRequest) {
     await user.save();
     const otp = new OTP({
       code: generateOTP(),
-      user: user._id as unknown as Schema.Types.ObjectId,
+      user: user._id as unknown as Types.ObjectId,
     });
     await otp.save();
 
-    user.otps.push(otp._id as unknown as Schema.Types.ObjectId);
+    user.otps.push(otp._id as unknown as Types.ObjectId);
     await user.save();
 
     saveDeviceData(request, user._id as Types.ObjectId, ["signup"]);

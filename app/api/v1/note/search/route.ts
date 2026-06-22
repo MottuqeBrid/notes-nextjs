@@ -6,13 +6,10 @@ import { Types } from "mongoose";
 import type { NextRequest } from "next/server";
 import { authenticate } from "@/middleware/userMiddleware";
 
-interface RouteParams {
-  params: Promise<{ search: string }>;
-}
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest) {
   try {
     const payload = await authenticate(request);
-    const { search } = await params;
+    const search = request.nextUrl.searchParams.get("search") ?? "";
     await connectDB();
 
     const user = await User.findById(payload.id).populate("notes");
