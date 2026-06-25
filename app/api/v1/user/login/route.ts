@@ -1,7 +1,7 @@
 import { comparePassword } from "@/lib/password";
 import { generateToken } from "@/lib/jwt";
 import { connectDB } from "@/lib/mongoose";
-import { saveDeviceData } from "@/lib/saveDeviceDataTemp";
+import { saveDeviceData } from "@/lib/saveDevicedata";
 import User from "@/models/userModel";
 import { TokenPayload } from "@/lib/jwt";
 import { Types } from "mongoose";

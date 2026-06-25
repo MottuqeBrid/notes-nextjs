@@ -6,8 +6,7 @@ import OTP from "@/models/otpModel";
 import User from "@/models/userModel";
 import type { NextRequest } from "next/server";
 import { Types } from "mongoose";
-import { saveDeviceData } from "@/lib/saveDeviceDataTemp";
-
+import { saveDeviceData } from "@/lib/saveDevicedata";
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
