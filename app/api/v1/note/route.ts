@@ -1,6 +1,6 @@
 // app/api/note/route.ts
 import { connectDB } from "@/lib/mongoose";
-import { saveDeviceData } from "@/lib/saveDevicedata";
+import { saveDeviceData } from "@/lib/saveDeviceData";
 import User from "@/models/userModel";
 import Note, { INote } from "@/models/noteModel";
 import { Types } from "mongoose";
