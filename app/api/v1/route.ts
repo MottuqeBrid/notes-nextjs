@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   // console.log("Request:", request);
-  saveDeviceData(request, new Types.ObjectId(), ["test", "GET"]);
+  await saveDeviceData(request, new Types.ObjectId(), ["test", "GET"]);
   return Response.json({
     message: "This Note API",
     request: JSON.stringify(request),
