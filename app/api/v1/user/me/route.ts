@@ -1,6 +1,6 @@
 // app/api/user/me/route.ts
 import { connectDB } from "@/lib/mongoose";
-import { saveDeviceData } from "@/lib/saveDevicedata";
+import { saveDeviceData } from "@/lib/saveDeviceData";
 import { authenticate } from "@/middleware/userMiddleware";
 import User from "@/models/userModel";
 import { Types } from "mongoose";
