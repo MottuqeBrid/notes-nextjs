@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/mongoose";
-import { saveDeviceData } from "@/lib/saveDeviceData";
+import { saveDeviceData } from "@/lib/saveDeviceDataTemp";
 import User from "@/models/userModel";
 import { INote } from "@/models/noteModel";
 import { Types } from "mongoose";

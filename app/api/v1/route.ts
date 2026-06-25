@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/mongoose";
-import { saveDeviceData } from "@/lib/saveDeviceData";
+import { saveDeviceData } from "@/lib/saveDeviceDataTemp";
 import { Types } from "mongoose";
 import { NextRequest } from "next/server";
 
