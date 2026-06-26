@@ -1,5 +1,4 @@
 // app/api/upload/route.ts
-import { authenticate } from "@/middleware/userMiddleware";
 import { uploadContentToSupabase, uploadFileToSupabase } from "@/lib/supabase";
 import { uploadImageToImgbb } from "@/lib/imgbb";
 import type { NextRequest } from "next/server";

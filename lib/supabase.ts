@@ -1,16 +1,21 @@
 // lib/supabase.ts
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const SUPABASE_BUCKET = process.env.SUPABASE_BUCKET ?? "uploads";
 
-if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error("Supabase credentials are not defined in .env.local");
-}
-
 // Service role key দিয়ে client বানাও (server-side only)
-export const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error(
+      "Supabase credentials are not defined. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
+    );
+  }
+
+  return createClient(supabaseUrl, serviceRoleKey);
+}
 
 const CONTENT_TYPE_MAP: Record<string, string> = {
   text: "text/plain",
@@ -109,6 +114,7 @@ export async function uploadContentToSupabase(
     : generateFilename(ext);
 
   const buffer = Buffer.from(content, "utf-8");
+  const supabase = getSupabaseClient();
 
   const { error } = await supabase.storage
     .from(SUPABASE_BUCKET)
@@ -139,6 +145,7 @@ export async function uploadFileToSupabase(file: File): Promise<UploadResult> {
   const ext = file.name.split(".").pop() ?? "bin";
   const filename = generateFilename(ext);
   const buffer = Buffer.from(await file.arrayBuffer());
+  const supabase = getSupabaseClient();
 
   const { error } = await supabase.storage
     .from(SUPABASE_BUCKET)
@@ -166,6 +173,8 @@ export async function uploadFileToSupabase(file: File): Promise<UploadResult> {
 
 // ✅ File delete
 export async function deleteFromSupabase(filename: string): Promise<void> {
+  const supabase = getSupabaseClient();
+
   const { error } = await supabase.storage
     .from(SUPABASE_BUCKET)
     .remove([filename]);

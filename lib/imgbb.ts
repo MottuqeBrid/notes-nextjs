@@ -1,10 +1,4 @@
 // lib/imgbb.ts
-const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
-
-if (!IMGBB_API_KEY) {
-  throw new Error("IMGBB_API_KEY is not defined in .env.local");
-}
-
 export interface ImgbbResult {
   filename: string;
   originalName: string;
@@ -18,11 +12,17 @@ export interface ImgbbResult {
 }
 
 export async function uploadImageToImgbb(file: File): Promise<ImgbbResult> {
+  const imgbbApiKey = process.env.IMGBB_API_KEY;
+
+  if (!imgbbApiKey) {
+    throw new Error("IMGBB_API_KEY is not defined.");
+  }
+
   const buffer = await file.arrayBuffer();
   const base64 = Buffer.from(buffer).toString("base64");
 
   const form = new FormData();
-  form.append("key", IMGBB_API_KEY!);
+  form.append("key", imgbbApiKey);
   form.append("image", base64);
   form.append("name", file.name);
 
