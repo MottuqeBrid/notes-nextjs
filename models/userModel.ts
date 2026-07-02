@@ -4,6 +4,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   name: string;
+  phoneNumber: string;
   role: "user" | "admin" | "moderator";
   notes: Types.ObjectId[]; // ← fix
   folders: Types.ObjectId[]; // ← fix
@@ -20,6 +21,7 @@ const userSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
+    phoneNumber: { type: String },
     role: {
       type: String,
       enum: ["user", "admin", "moderator"],

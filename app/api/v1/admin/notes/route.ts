@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongoose";
 import { saveDeviceData } from "@/lib/saveDeviceData";
 import { authenticate } from "@/middleware/userMiddleware";
+import Note from "@/models/noteModel";
 import User from "@/models/userModel";
 import { Types } from "mongoose";
 import type { NextRequest } from "next/server";
@@ -35,17 +36,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const users = await User.find();
+    const notes = await Note.find().populate("user", "name email");
     await saveDeviceData(request, admin._id as Types.ObjectId, [
       "admin",
       "GET",
       "admin:" + payload.id,
-      "total users:" + users.length,
+      "total notes:" + notes.length,
     ]);
     return Response.json({
-      message: "All users retrieved successfully",
+      message: "All notes retrieved successfully",
       success: true,
-      users,
+      notes,
     });
   } catch (error) {
     return Response.json(

@@ -1,11 +1,15 @@
 import { connectDB } from "@/lib/mongoose";
 import { saveDeviceData } from "@/lib/saveDeviceData";
 import { authenticate } from "@/middleware/userMiddleware";
+import Note from "@/models/noteModel";
 import User from "@/models/userModel";
 import { Types } from "mongoose";
 import type { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
   try {
     const payload = await authenticate(request);
     if (!payload) {
@@ -34,22 +38,26 @@ export async function GET(request: NextRequest) {
         { status: 401 },
       );
     }
-
-    const users = await User.find();
+    const { id } = await params;
+    const note = await Note.findByIdAndUpdate(id, { isDeleted: true });
+    if (!note) {
+      return Response.json(
+        { success: false, message: "Note not found" },
+        { status: 404 },
+      );
+    }
     await saveDeviceData(request, admin._id as Types.ObjectId, [
-      "admin",
-      "GET",
-      "admin:" + payload.id,
-      "total users:" + users.length,
+      "DELETE",
+      "admin" + admin._id,
+      "note:" + id,
     ]);
     return Response.json({
-      message: "All users retrieved successfully",
+      message: "Note deleted successfully",
       success: true,
-      users,
     });
   } catch (error) {
     return Response.json(
-      { success: false, message: "Failed to connect to database", error },
+      { success: false, message: "Internal server error", error },
       { status: 500 },
     );
   }
