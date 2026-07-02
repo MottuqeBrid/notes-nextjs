@@ -12,6 +12,22 @@ const nextConfig: NextConfig = {
             value: "http://localhost:5173",
           },
           {
+            key: "Access-Control-Allow-Origin",
+            value: "http://localhost:5174",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "http://localhost:3000",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://note-v2.pages.dev",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://note.brid.bd",
+          },
+          {
             key: "Access-Control-Allow-Methods",
             value: "GET,POST,PUT,DELETE,OPTIONS",
           },
