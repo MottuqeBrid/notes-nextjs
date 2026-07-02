@@ -10,33 +10,33 @@ const allowedOrigins = [
   "https://note.brid.bd",
 ];
 
-const corsOptions = {
+const corsOptions: Record<string, string> = {
   "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+function getCorsHeaders(origin: string): Record<string, string> {
+  const headers: Record<string, string> = { ...corsOptions };
+
+  if (allowedOrigins.includes(origin)) {
+    headers["Access-Control-Allow-Origin"] = origin;
+    headers["Access-Control-Allow-Credentials"] = "true";
+  }
+
+  return headers;
+}
+
 export function proxy(request: NextRequest) {
   const origin = request.headers.get("origin") ?? "";
-  const isAllowedOrigin = allowedOrigins.includes(origin);
   const isPreflight = request.method === "OPTIONS";
+  const headers = getCorsHeaders(origin);
 
   if (isPreflight) {
-    return NextResponse.json(
-      {},
-      {
-        headers: {
-          ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
-          ...corsOptions,
-        },
-      },
-    );
+    return NextResponse.json({}, { headers });
   }
 
   const response = NextResponse.next();
-  if (isAllowedOrigin) {
-    response.headers.set("Access-Control-Allow-Origin", origin);
-  }
-  Object.entries(corsOptions).forEach(([key, value]) => {
+  Object.entries(headers).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
 
