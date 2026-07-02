@@ -78,6 +78,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const body = await request.json();
     const { id } = await params;
     const payload = await authenticate(request);
+    await connectDB();
     const user = await User.findById(payload.id);
     if (!user) {
       return Response.json(

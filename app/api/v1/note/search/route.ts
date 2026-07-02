@@ -9,7 +9,7 @@ import { authenticate } from "@/middleware/userMiddleware";
 export async function GET(request: NextRequest) {
   try {
     const payload = await authenticate(request);
-    const search = request.nextUrl.searchParams.get("search") ?? "";
+    const search = request.nextUrl.searchParams.get("query") ?? "";
     await connectDB();
 
     const user = await User.findById(payload.id).populate("notes");
@@ -22,8 +22,10 @@ export async function GET(request: NextRequest) {
 
     await saveDeviceData(request, user._id as Types.ObjectId, ["search-notes"]);
 
-    const notes = (user.notes as unknown as INote[]).filter((note) =>
-      note.title.toLowerCase().includes(search.toLowerCase()),
+    const notes = (user.notes as unknown as INote[]).filter(
+      (note) =>
+        note.title.toLowerCase().includes(search.toLowerCase()) &&
+        !note.deleted,
     );
 
     return Response.json({

@@ -130,7 +130,9 @@ export async function GET(request: NextRequest) {
       {
         success: true,
         message: "Notes fetched successfully",
-        notes,
+        notes: notes.sort(
+          (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+        ), // Sort by createdAt descending
         total: notes.length,
         page,
         limit,
