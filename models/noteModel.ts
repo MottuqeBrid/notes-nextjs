@@ -33,13 +33,11 @@ type ContentType =
   | "scss"
   | "less";
 
-type FileType = "file" | "image" | "video" | "audio" | "other";
-
 interface IFile {
   filename: string;
   originalName: string;
   url: string;
-  type: FileType;
+  type: string;
 }
 
 interface IContent {
@@ -65,7 +63,6 @@ const fileSchema = new Schema<IFile>(
     url: { type: String, required: true },
     type: {
       type: String,
-      enum: ["file", "image", "video", "audio", "other"],
       default: "file",
     },
   },

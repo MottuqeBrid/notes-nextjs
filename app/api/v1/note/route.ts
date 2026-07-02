@@ -47,10 +47,14 @@ export async function POST(request: NextRequest) {
     });
     await note.save();
 
-    user.notes.push(note._id as Types.ObjectId);
+    await user.notes.push(note._id as Types.ObjectId);
     await user.save();
 
-    await saveDeviceData(request, user._id as Types.ObjectId, ["create-note"]);
+    await saveDeviceData(request, user._id as Types.ObjectId, [
+      "create-note",
+      "note-id:" + note._id,
+      "note-title:" + note.title,
+    ]);
 
     return Response.json(
       { success: true, message: "Note created successfully", note },
@@ -109,7 +113,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    await saveDeviceData(request, user._id as Types.ObjectId, ["get-notes"]);
+    await saveDeviceData(request, user._id as Types.ObjectId, [
+      "get-notes",
+      "page:" + page,
+      "limit:" + limit,
+      "skip:" + skip,
+      "total:" + user.notes.length,
+      "user-id:" + user._id,
+    ]);
 
     let notes = user.notes as unknown as INote[]; // Type assertion
     notes = notes.filter((note) => !note.deleted); // Deleted notes filter করো
