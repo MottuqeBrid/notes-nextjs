@@ -37,6 +37,7 @@ type FileType = "file" | "image" | "video" | "audio" | "other";
 
 interface IFile {
   filename: string;
+  originalName: string;
   url: string;
   type: FileType;
 }
@@ -60,6 +61,7 @@ export interface INote extends Document {
 const fileSchema = new Schema<IFile>(
   {
     filename: { type: String, required: true },
+    originalName: { type: String },
     url: { type: String, required: true },
     type: {
       type: String,
