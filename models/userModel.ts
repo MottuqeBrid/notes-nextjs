@@ -10,6 +10,7 @@ export interface IUser extends Document {
   isVerified: boolean;
   isDeleted: boolean;
   profilePicture: string;
+  images: string[];
   tokens: Types.ObjectId[]; // ← fix
   otps: Types.ObjectId[]; // ← fix
 }
@@ -29,6 +30,7 @@ const userSchema = new Schema<IUser>(
     isVerified: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     profilePicture: { type: String },
+    images: [{ type: String }],
     tokens: [{ type: Schema.Types.ObjectId, ref: "Token" }],
     otps: [{ type: Schema.Types.ObjectId, ref: "OTP" }],
   },
