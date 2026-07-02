@@ -2,7 +2,7 @@ import { saveDeviceData } from "@/lib/saveDeviceData";
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-function getSupabaseClient() {
+async function getSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   // }
 
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
 
     // যেকোনো ছোট query চালাও
     const { error, data } = await supabase
@@ -32,7 +32,11 @@ export async function GET(request: NextRequest) {
       .limit(1);
 
     if (error) throw error;
-    saveDeviceData(request, null, ["keep-alive", "GET", JSON.stringify(data)]);
+    await saveDeviceData(request, null, [
+      "keep-alive",
+      "GET",
+      JSON.stringify(data),
+    ]);
 
     return Response.json({
       success: true,
