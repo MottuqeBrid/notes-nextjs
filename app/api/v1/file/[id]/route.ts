@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 import { saveDeviceData } from "@/lib/saveDeviceData";
 import User from "@/models/userModel";
 import File from "@/models/fileModel";
+import "@/models/noteModel";
 
 export async function GET(
   request: NextRequest,
@@ -61,9 +62,7 @@ export async function DELETE(
     const { id: fileId } = await params;
     const payload = await authenticate(request);
     await connectDB();
-    const user = await User.findById(payload.id)
-      .select("-password")
-      .populate("files");
+    const user = await User.findById(payload.id);
     if (!user) {
       return Response.json(
         { message: "User not found", success: false },

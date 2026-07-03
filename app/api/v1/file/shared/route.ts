@@ -28,8 +28,6 @@ export async function GET(request: NextRequest) {
       isDeleted: false,
       $or: [
         { privacy: "public" },
-        // { owner: user._id }, // for owner
-        // { sharedWith: user._id },
         { sharedWith: { $in: [user._id] } },
       ],
     });
