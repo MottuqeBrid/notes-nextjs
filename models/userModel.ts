@@ -28,7 +28,7 @@ const userSchema = new Schema<IUser>(
       default: "user",
     },
     notes: [{ type: Schema.Types.ObjectId, ref: "Note" }],
-    folders: [{ type: Schema.Types.ObjectId, ref: "Folder" }],
+    folders: [{ type: Schema.Types.ObjectId, ref: "File" }],
     isVerified: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     profilePicture: { type: String },

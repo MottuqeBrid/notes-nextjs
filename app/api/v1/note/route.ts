@@ -71,9 +71,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   // Token verify করো
-  let payload;
+
+  const payload = await authenticate(request);
   try {
-    payload = await authenticate(request);
   } catch {
     return Response.json(
       { success: false, message: "Unauthorized" },

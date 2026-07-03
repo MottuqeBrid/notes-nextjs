@@ -3,6 +3,10 @@ import { connectDB } from "@/lib/mongoose";
 import { saveDeviceData } from "@/lib/saveDeviceData";
 import { authenticate } from "@/middleware/userMiddleware";
 import User from "@/models/userModel";
+import "@/models/fileModel";
+import "@/models/noteModel";
+import "@/models/tokenModel";
+import "@/models/otpModel";
 import { Types } from "mongoose";
 import type { NextRequest } from "next/server";
 
@@ -21,7 +25,9 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
-    const user = await User.findById(payload.id).select("-password");
+    const user = await User.findById(payload.id).select("-password").populate<{
+      notes: { _id: Types.ObjectId; deleted: boolean }[];
+    }>("notes");
     if (!user) {
       return Response.json(
         { success: false, message: "User not found" },
@@ -29,10 +35,20 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    await saveDeviceData(request, user._id as Types.ObjectId, ["user-me"]);
-
+    await saveDeviceData(request, user._id as Types.ObjectId, [
+      "user-me",
+      "GET",
+      "user:" + user._id,
+    ]);
+    const userData = {
+      ...user.toObject(),
+      notes: user.notes.map((note) => {
+        if (note.deleted === false) return note._id;
+      }),
+      notesCount: user.notes.filter((note) => note.deleted === false).length,
+    };
     return Response.json(
-      { success: true, message: "User retrieved successfully", user },
+      { success: true, message: "User retrieved successfully", user: userData },
       { status: 200 },
     );
   } catch (error: unknown) {

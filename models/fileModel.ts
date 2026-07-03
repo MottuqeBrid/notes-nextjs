@@ -1,5 +1,5 @@
-import mongoose, { Schema, Model, Document } from "mongoose";
-
+import mongoose, { Schema, Types } from "mongoose";
+import type { Model, Document } from "mongoose";
 export interface IFile extends Document {
   folder: {
     name: string;
@@ -17,8 +17,8 @@ export interface IFile extends Document {
       type: "file" | "image" | "video" | "audio" | "other";
     }[];
   };
-  owner: Schema.Types.ObjectId;
-  sharedWith: Schema.Types.ObjectId[];
+  owner: Types.ObjectId;
+  sharedWith: Types.ObjectId[];
   privacy: "public" | "private";
   isDeleted: boolean;
 }
@@ -57,13 +57,13 @@ const fileSchema = new mongoose.Schema(
       ],
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     sharedWith: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
       },
     ],

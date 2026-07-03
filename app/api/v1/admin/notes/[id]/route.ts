@@ -6,9 +6,13 @@ import User from "@/models/userModel";
 import { Types } from "mongoose";
 import type { NextRequest } from "next/server";
 
+interface RouteParams {
+  params: Promise<{ id: string }>;
+}
+
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: RouteParams,
 ) {
   try {
     const payload = await authenticate(request);
@@ -39,7 +43,11 @@ export async function DELETE(
       );
     }
     const { id } = await params;
-    const note = await Note.findByIdAndUpdate(id, { isDeleted: true });
+    const note = await Note.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true },
+    );
     if (!note) {
       return Response.json(
         { success: false, message: "Note not found" },

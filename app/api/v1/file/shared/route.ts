@@ -24,59 +24,30 @@ export async function GET(request: NextRequest) {
         { status: 404 },
       );
     }
-    const files = await File.find({ owner: user._id, isDeleted: false });
+    const files = await File.find({
+      isDeleted: false,
+      $or: [
+        { privacy: "public" },
+        // { owner: user._id }, // for owner
+        // { sharedWith: user._id },
+        { sharedWith: { $in: [user._id] } },
+      ],
+    });
     if (!files || files.length === 0) {
       return Response.json(
-        { message: "File not found", success: false },
+        { message: "Shared files not found", success: false },
         { status: 404 },
       );
     }
     await saveDeviceData(request, user._id, [
-      "files",
+      "shared files",
       "GET",
       "user:" + user._id,
     ]);
     return Response.json({
-      message: "Files fetched successfully",
+      message: "Shared files fetched successfully",
       success: true,
       files,
-    });
-  } catch (error) {
-    return Response.json(
-      { error, message: "Internal server error", success: false },
-      { status: 500 },
-    );
-  }
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const payload = await authenticate(request);
-    const body = await request.json();
-    await connectDB();
-    const user = await User.findById(payload.id);
-    if (!user) {
-      return Response.json(
-        { message: "User not found", success: false },
-        { status: 404 },
-      );
-    }
-    if (user.isDeleted) {
-      return Response.json(
-        { message: "User deleted", success: false },
-        { status: 404 },
-      );
-    }
-    const file = await File.create({ ...body, owner: user._id });
-    await saveDeviceData(request, user._id, [
-      "files",
-      "POST",
-      "user:" + user._id,
-    ]);
-    return Response.json({
-      message: "File created successfully",
-      success: true,
-      file,
     });
   } catch (error) {
     return Response.json(

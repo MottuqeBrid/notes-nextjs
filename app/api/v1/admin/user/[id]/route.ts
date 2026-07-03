@@ -5,9 +5,13 @@ import User from "@/models/userModel";
 import { Types } from "mongoose";
 import type { NextRequest } from "next/server";
 
+interface RouteParams {
+  params: Promise<{ id: string }>;
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: RouteParams,
 ) {
   try {
     const payload = await authenticate(request);
@@ -62,7 +66,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: RouteParams,
 ) {
   try {
     const payload = await authenticate(request);
@@ -121,7 +125,7 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: RouteParams,
 ) {
   try {
     const payload = await authenticate(request);
