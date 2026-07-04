@@ -12,17 +12,16 @@ import { authenticate } from "@/middleware/userMiddleware";
 
 export async function POST(request: NextRequest) {
   // Token verify করো
-  let payload;
-  try {
-    payload = await authenticate(request);
-  } catch {
-    return Response.json(
-      { success: false, message: "Unauthorized" },
-      { status: 401 },
-    );
-  }
 
   try {
+    const payload = await authenticate(request);
+    console.log("Authenticated payload:", payload);
+    if (!payload) {
+      return Response.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+    }
     await connectDB();
 
     const user = await User.findById(payload.id).populate("notes");
