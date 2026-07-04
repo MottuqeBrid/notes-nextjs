@@ -1,4 +1,4 @@
-import mongoose, { Schema, Model, Document } from "mongoose";
+import mongoose, { Schema, Model, Document, Types } from "mongoose";
 
 export interface IEmail extends Document {
   email: string;
@@ -15,6 +15,7 @@ export interface IEmail extends Document {
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
+  user: Types.ObjectId;
 }
 
 const emailSchema = new Schema(
@@ -59,6 +60,10 @@ const emailSchema = new Schema(
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {

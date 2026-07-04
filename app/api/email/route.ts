@@ -4,33 +4,17 @@ import "@/models/noteModel";
 import "@/models/userModel";
 import "@/models/fileModel";
 import { connectDB } from "@/lib/mongoose";
+import User from "@/models/userModel";
 
 export async function POST(request: NextRequest) {
+  let to;
+  let email;
   try {
     await connectDB();
 
     const body = await request.json();
-
-    // const mail = {
-    //   from: body.from,
-    //   to: body.to,
-    //   subject: body.subject || "",
-    //   text: body.text || "",
-    //   html: body.html || "",
-    //   attachments: body.attachments || [],
-    //   messageId: body.messageId || null,
-    //   replyTo: body.replyTo || null,
-    //   receivedAt: body.receivedAt || new Date(),
-    //   headers: {
-    //     subject: body.headers?.subject,
-    //     date: body.headers?.date,
-    //     from: body.headers?.from,
-    //     to: body.headers?.to,
-    //     "message-id": body.headers?.["message-id"],
-    //   },
-    // };
-
-    const email = await Email.create({
+    to = body.to;
+    email = await Email.create({
       email: body.to,
       ...body,
     });
@@ -41,8 +25,6 @@ export async function POST(request: NextRequest) {
       id: email._id,
     });
   } catch (error) {
-    console.error("EMAIL API ERROR:", error);
-
     return Response.json(
       {
         success: false,
@@ -53,6 +35,14 @@ export async function POST(request: NextRequest) {
         status: 500,
       },
     );
+  } finally {
+    await connectDB();
+    const user = await User.findOne({
+      emails: to,
+    });
+    if (user && email) {
+      await email.updateOne({ user: user._id });
+    }
   }
 }
 
