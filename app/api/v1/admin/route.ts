@@ -4,10 +4,8 @@ import User from "@/models/userModel";
 import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  console.log("GET /admin");
   try {
     const payload = await authenticate(request);
-    console.log("Authenticated payload:", payload);
     if (!payload) {
       return Response.json(
         { success: false, message: "Unauthorized" },

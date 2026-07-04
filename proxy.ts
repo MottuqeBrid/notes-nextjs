@@ -8,6 +8,8 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://note-v2.pages.dev",
   "https://note.brid.bd",
+  "https://email.sahoreiasorker.workers.dev",
+  "https://temp-email-worker.sahoreiasorker.workers.dev",
 ];
 
 const corsOptions: Record<string, string> = {
