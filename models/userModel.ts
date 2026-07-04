@@ -12,6 +12,7 @@ export interface IUser extends Document {
   isDeleted: boolean;
   profilePicture: string;
   images: string[];
+  emails: string[];
   tokens: Types.ObjectId[]; // ← fix
   otps: Types.ObjectId[]; // ← fix
 }
@@ -33,6 +34,11 @@ const userSchema = new Schema<IUser>(
     isDeleted: { type: Boolean, default: false },
     profilePicture: { type: String },
     images: [{ type: String }],
+    emails: [
+      {
+        type: String,
+      },
+    ],
     tokens: [{ type: Schema.Types.ObjectId, ref: "Token" }],
     otps: [{ type: Schema.Types.ObjectId, ref: "OTP" }],
   },
