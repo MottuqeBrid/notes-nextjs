@@ -1,33 +1,72 @@
-import mongoose, { Schema, Types } from "mongoose";
-import type { Model, Document } from "mongoose";
-export interface Email extends Document {
+import mongoose, { Schema, Model, Document } from "mongoose";
+
+export interface IEmail extends Document {
   email: string;
-  user: Types.ObjectId;
+  from: string;
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+  attachments: unknown[];
+  messageId?: string;
+  replyTo?: string;
+  receivedAt: Date;
+  headers?: Record<string, string>;
   isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const emailSchema = new mongoose.Schema(
+const emailSchema = new Schema(
   {
     email: {
       type: String,
       required: true,
+      index: true,
     },
-    data: {
+
+    from: {
+      type: String,
+    },
+    to: {
+      type: String,
+    },
+    subject: {
+      type: String,
+    },
+    text: {
+      type: String,
+    },
+    html: {
+      type: String,
+    },
+    attachments: {
+      type: [Object],
+    },
+    messageId: {
+      type: String,
+    },
+    replyTo: {
+      type: String,
+    },
+    receivedAt: {
+      type: Date,
+    },
+    headers: {
       type: Object,
     },
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+
     isDeleted: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
-const Email: Model<Email> =
-  mongoose.models.Email || mongoose.model<Email>("Email", emailSchema);
+const Email: Model<IEmail> =
+  mongoose.models.Email || mongoose.model<IEmail>("Email", emailSchema);
 
 export default Email;
