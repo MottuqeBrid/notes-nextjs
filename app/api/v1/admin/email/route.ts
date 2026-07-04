@@ -39,7 +39,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const emails = await Email.find().sort({ createdAt: -1 });
+    const emails = await Email.find()
+      .populate("user", "email name profilePicture")
+      .sort({ createdAt: -1 });
     return Response.json({
       message: "All emails retrieved successfully",
       success: true,
