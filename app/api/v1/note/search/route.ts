@@ -1,6 +1,10 @@
 import { connectDB } from "@/lib/mongoose";
 import { saveDeviceData } from "@/lib/saveDeviceData";
 import User from "@/models/userModel";
+import "@/models/noteModel";
+import "@/models/fileModel";
+import "@/models/tokenModel";
+import "@/models/otpModel";
 import { INote } from "@/models/noteModel";
 import { Types } from "mongoose";
 import type { NextRequest } from "next/server";
