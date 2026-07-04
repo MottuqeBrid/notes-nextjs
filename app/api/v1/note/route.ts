@@ -74,17 +74,14 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   // Token verify করো
-
-  const payload = await authenticate(request);
   try {
-  } catch {
-    return Response.json(
-      { success: false, message: "Unauthorized" },
-      { status: 401 },
-    );
-  }
-
-  try {
+    const payload = await authenticate(request);
+    if (!payload) {
+      return Response.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+    }
     await connectDB();
 
     const { searchParams } = request.nextUrl;
