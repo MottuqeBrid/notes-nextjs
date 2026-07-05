@@ -11,6 +11,7 @@ export interface IUser extends Document {
   isVerified: boolean;
   isDeleted: boolean;
   profilePicture: string;
+  messagesId: string[];
   images: string[];
   emails: string[];
   tokens: Types.ObjectId[]; // ← fix
@@ -34,6 +35,11 @@ const userSchema = new Schema<IUser>(
     isDeleted: { type: Boolean, default: false },
     profilePicture: { type: String },
     images: [{ type: String }],
+    messagesId: [
+      {
+        type: String,
+      },
+    ],
     emails: [
       {
         type: String,

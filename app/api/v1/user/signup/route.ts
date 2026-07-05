@@ -7,6 +7,7 @@ import User from "@/models/userModel";
 import type { NextRequest } from "next/server";
 import { Types } from "mongoose";
 import { saveDeviceData } from "@/lib/saveDeviceData";
+import { sendOTP } from "@/lib/email";
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
@@ -37,13 +38,17 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
     });
     await user.save();
+    const otpCode = await generateOTP();
+    const sendOtp = await sendOTP("otp@brid.bd", email, otpCode);
     const otp = new OTP({
-      code: generateOTP(),
+      code: otpCode,
       user: user._id as unknown as Types.ObjectId,
     });
     await otp.save();
 
     user.otps.push(otp._id as unknown as Types.ObjectId);
+    user.isVerified = false;
+    user.messagesId.push(sendOtp.messageId as string);
     await user.save();
 
     saveDeviceData(request, user._id as Types.ObjectId, ["signup"]);
