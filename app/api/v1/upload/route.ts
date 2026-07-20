@@ -92,15 +92,15 @@ interface FileResponse {
   type: string;
 }
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+// const CORS = {
+//   "Access-Control-Allow-Origin": "*",
+//   "Access-Control-Allow-Methods": "GET, OPTIONS",
+//   "Access-Control-Allow-Headers": "Content-Type, Authorization",
+// };
 
-export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: CORS });
-}
+// export async function OPTIONS() {
+//   return new Response(null, { status: 204, headers: CORS });
+// }
 
 export async function POST(request: NextRequest) {
   try {
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
 
       return Response.json(
         { success: true, message: "Content uploaded successfully", file },
-        { status: 201, headers: CORS },
+        { status: 201 },
       );
     }
 
@@ -137,14 +137,14 @@ export async function POST(request: NextRequest) {
     if (!files || files.length === 0) {
       return Response.json(
         { success: false, message: "No files or content provided" },
-        { status: 400, headers: CORS },
+        { status: 400 },
       );
     }
 
     if (files.length > 10) {
       return Response.json(
         { success: false, message: "Maximum 10 files allowed" },
-        { status: 400, headers: CORS },
+        { status: 400 },
       );
     }
 
@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
     if (results.length === 0) {
       return Response.json(
         { success: false, message: "All uploads failed", errors },
-        { status: 500, headers: CORS },
+        { status: 500 },
       );
     }
 
@@ -206,13 +206,13 @@ export async function POST(request: NextRequest) {
         files: results,
         errors: errors.length > 0 ? errors : undefined,
       },
-      { status: 201, headers: CORS },
+      { status: 201 },
     );
   } catch (error: unknown) {
     console.error("POST /upload error:", error);
     return Response.json(
       { success: false, message: "Internal server error" },
-      { status: 500, headers: CORS },
+      { status: 500 },
     );
   }
 }
