@@ -9,10 +9,7 @@ interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: RouteParams,
-) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const payload = await authenticate(request);
     if (!payload) {
@@ -64,10 +61,7 @@ export async function GET(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: RouteParams,
-) {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const payload = await authenticate(request);
     if (!payload) {
@@ -123,10 +117,7 @@ export async function DELETE(
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: RouteParams,
-) {
+export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const payload = await authenticate(request);
     if (!payload) {

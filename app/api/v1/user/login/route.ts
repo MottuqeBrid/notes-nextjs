@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
     const token = generateToken<TokenPayload>({
       id: (user._id as Types.ObjectId).toString(),
       role: user.role,
+      level: user?.level,
     });
 
     const res = Response.json(

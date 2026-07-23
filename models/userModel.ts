@@ -11,6 +11,7 @@ export interface IUser extends Document {
   isVerified: boolean;
   isDeleted: boolean;
   profilePicture: string;
+  level: number;
   messagesId: string[];
   images: string[];
   emails: string[];
@@ -35,6 +36,7 @@ const userSchema = new Schema<IUser>(
     isDeleted: { type: Boolean, default: false },
     profilePicture: { type: String },
     images: [{ type: String }],
+    level: { type: Number, default: 1 },
     messagesId: [
       {
         type: String,

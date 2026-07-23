@@ -46,6 +46,7 @@ export async function GET(request: NextRequest) {
         if (note.deleted === false) return note._id;
       }),
       notesCount: user.notes.filter((note) => note.deleted === false).length,
+      level: user?.level ? user?.level : 1,
     };
     return Response.json(
       { success: true, message: "User retrieved successfully", user: userData },
