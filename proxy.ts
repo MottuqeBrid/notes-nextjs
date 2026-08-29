@@ -17,10 +17,29 @@ const corsOptions: Record<string, string> = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+function isAllowedOrigin(origin: string): boolean {
+  // আপনার manually allowed origins
+  if (allowedOrigins.includes(origin)) {
+    return true;
+  }
+
+  try {
+    const url = new URL(origin);
+
+    // brid.bd এবং এর সব subdomain allow করবে
+    return (
+      url.protocol === "https:" &&
+      (url.hostname === "brid.bd" || url.hostname.endsWith(".brid.bd"))
+    );
+  } catch {
+    return false;
+  }
+}
+
 function getCorsHeaders(origin: string): Record<string, string> {
   const headers: Record<string, string> = { ...corsOptions };
 
-  if (allowedOrigins.includes(origin)) {
+  if (allowedOrigins.includes(origin) || isAllowedOrigin(origin)) {
     headers["Access-Control-Allow-Origin"] = origin;
     headers["Access-Control-Allow-Credentials"] = "true";
   }
